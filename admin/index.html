@@ -35,8 +35,10 @@
                 <li><a href="#" target="m_self"><i class="iconfont icon-previewright"></i><span>文章类别管理</span></a></li>
             </ul>
 
-            <div class="level01"><a href="#" target="_self"><i class="iconfont icon-comment"></i><span>评论管理</span></a></div>
-            <div class="level01" id="user"><a href="#" target="_self"><i class="iconfont icon-user"></i><span>个人中心</span></a></div>
+            <div class="level01"><a href="#" target="_self"><i class="iconfont icon-comment"></i><span>评论管理</span></a>
+            </div>
+            <div class="level01" id="user"><a href="#" target="_self"><i
+                        class="iconfont icon-user"></i><span>个人中心</span></a></div>
         </div>
     </div>
     <!-- 顶部栏 -->
@@ -46,15 +48,32 @@
             <i class="iconfont icon-search"></i>
         </form>
         <div class="user_center_link">
-            <a href="./user.html"  target="_self">个人中心</a>
+            <a href="./user.html" target="_self">个人中心</a>
             <img src="images/2.jpg" alt="person">
             <a href="javascript:void(0)" class="logout"><i class="iconfont icon-tuichu"></i> 退出</a>
         </div>
     </div>
     <!-- 右侧主体内容 -->
     <div class="main" id="main_body">
-        
+
     </div>
+
+
+    <script>
+        // 入口函数
+        $(function () {
+            $.ajax({
+                url: 'http://localhost:8080/api/v1/admin/user/info',
+                type: 'get',
+                dataType: 'json',
+                success: function (backData) {
+                    console.log(backData);
+
+                }
+            });
+        })
+
+    </script>
 </body>
 
 </html>
