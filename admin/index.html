@@ -68,9 +68,19 @@
                 dataType: 'json',
                 success: function (backData) {
                     console.log(backData);
-
+                    $('.user_info>img').attr('src',backData.data.userPic)
+                    $('.user_info>span').text('欢迎  '+backData.data.nickname)
+                    $('.user_center_link>img').attr('src',backData.data.userPic)
                 }
             });
+
+
+
+            // 退出登录
+            $('.logout').click(function(){
+                localStorage.removeItem('token')
+                window.location.href="./login(1).html"
+            })
         })
 
     </script>

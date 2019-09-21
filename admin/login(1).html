@@ -86,6 +86,7 @@
                         if (backData.code == 200) {
                             // 将token数据储存到localStorage中-----------------token数据相当于一张身份证
                             localStorage.setItem('token',backData.token)
+                            
                             $('#myModal').modal()
                             $('.modal-body>p').text(backData.msg)
                             // 模态框消失之后出发该事件
