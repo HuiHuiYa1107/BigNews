@@ -47,15 +47,15 @@
                         <img src="" alt="" class="user_pic">
                         <input style="display: none" name="userPic" type="file" id="exampleInputFile">
                         <br>
-                        <label for="exampleInputFile"><img src="./images/uploads_icon.jpg" alt="" style="widows: 50px;height:50px"></label>
+                        <label for="exampleInputFile"><img src="./images/uploads_icon.jpg" alt=""
+                                style="widows: 50px;height:50px"></label>
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label for="inputEmail4" class="col-sm-2 control-label">密码：</label>
                     <div class="col-sm-4">
-                        <input type="password" name="password" class="form-control password" id="inputEmail4"
-                            value="">
+                        <input type="password" name="password" class="form-control password" id="inputEmail4" value="">
                     </div>
                 </div>
                 <div class="form-group">
@@ -97,24 +97,25 @@
             $('.user_pic').attr('src', url);
         });
 
-        $('.btn-edit').on('click',function(e){
+        $('.btn-edit').on('click', function (e) {
             //禁用表单默认提交事件
             e.preventDefault();
+            // var form=document.getElementById('form')
             //创建FormData对象:参数是表单dom对象
-            var form=document.getElementById('form')
-            var fd=new FormData(form)
+            var fd = new FormData($('#form')[0])
             $.ajax({
-                url:BigNews.user_edit,
-                type:'post',
-                dataType:'json',
-                data:fd,
+                url: BigNews.user_edit,
+                type: 'post',
+                dataType: 'json',
+                data: fd,
                 contentType: false,
                 processData: false,
-                success: function(backData){
+                success: function (backData) {
                     console.log(backData);
-                    if(backData.code==200){
-                        alert(backData.msg)
-                        window.location.reload()
+                    if (backData.code == 200) {
+                        alert(backData.msg);
+                        // window.parent.location.reload()
+                        window.parent.location.reload();
                     }
                 }
             });

@@ -54,8 +54,8 @@
             <i class="iconfont icon-search"></i>
         </form>
         <div class="user_center_link">
-            <a href="./user.html" target="_self">个人中心</a>
-            <img src="images/2.jpg" alt="person">
+            <a href="./user.html" target="myIframe">个人中心</a>
+            <img src="" alt="person">
             <a href="javascript:void(0)" class="logout"><i class="iconfont icon-tuichu"></i> 退出</a>
         </div>
     </div>
@@ -111,6 +111,12 @@
                 localStorage.removeItem('token')
                 window.location.href = "./login(1).html"
             })
+
+            // 细节优化
+            $('.user_center_link').click(function(){
+                $('#user').trigger('click')
+            })
+
         })
 
     </script>
