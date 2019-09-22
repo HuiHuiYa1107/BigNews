@@ -14,6 +14,7 @@
     <!-- 引入js文件 -->
     <script src="./js/jquery-1.12.4.min.js"></script>
     <script src="./js/bootstrap/js/bootstrap.min.js"></script>
+    <script src="./js/http.js"></script>
 </head>
 
 <body>
@@ -74,7 +75,7 @@
                     return;
                 };
                 $.ajax({
-                    url: 'http://localhost:8080/api/v1/admin/user/login',
+                    url: BigNews.user_login,
                     type: 'post',
                     dataType: 'json',
                     data: {
@@ -85,8 +86,8 @@
                         console.log(backData);
                         if (backData.code == 200) {
                             // 将token数据储存到localStorage中-----------------token数据相当于一张身份证
-                            localStorage.setItem('token',backData.token)
-                            
+                            localStorage.setItem('token', backData.token)
+
                             $('#myModal').modal()
                             $('.modal-body>p').text(backData.msg)
                             // 模态框消失之后出发该事件
