@@ -25,27 +25,29 @@
                 <div class="form-group">
                     <label for="inputEmail1" class="col-sm-2 control-label">用户名称：</label>
                     <div class="col-sm-4">
-                        <input type="text" name="username" class="form-control username" id="inputEmail1" value="李宗盛">
+                        <input type="text" name="username" class="form-control username" id="inputEmail1" value="">
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="inputEmail2" class="col-sm-2 control-label">昵称：</label>
                     <div class="col-sm-4">
-                        <input type="text" name="nickname" class="form-control nickname" id="inputEmail2" value="保健坤">
+                        <input type="text" name="nickname" class="form-control nickname" id="inputEmail2" value="">
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="inputEmail3" class="col-sm-2 control-label">邮箱：</label>
                     <div class="col-sm-4">
-                        <input type="text" name="email" class="form-control email" id="inputEmail3" value="520@163.com">
+                        <input type="text" name="email" class="form-control email" id="inputEmail3" value="">
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label for="inputPassword3" class="col-sm-2 control-label">用户图标：</label>
                     <div class="col-sm-10">
-                        <img src="images/2.jpg" alt="" class="user_pic">
-                        <input style="display: block" name="userPic" type="file" id="exampleInputFile">
+                        <img src="" alt="" class="user_pic">
+                        <input style="display: none" name="userPic" type="file" id="exampleInputFile">
+                        <br>
+                        <label for="exampleInputFile"><img src="./images/uploads_icon.jpg" alt="" style="widows: 50px;height:50px"></label>
                     </div>
                 </div>
 
@@ -53,7 +55,7 @@
                     <label for="inputEmail4" class="col-sm-2 control-label">密码：</label>
                     <div class="col-sm-4">
                         <input type="password" name="password" class="form-control password" id="inputEmail4"
-                            value="12345678">
+                            value="">
                     </div>
                 </div>
                 <div class="form-group">
@@ -64,6 +66,61 @@
             </form>
         </div>
     </div>
+
+
+    <script>
+        //页面一加载获取用户信息 渲染页面
+        $(function () {
+            $.ajax({
+                url: BigNews.user_detail,
+                type: 'get',
+                dataType: 'json',
+                success: function (backData) {
+                    console.log(backData);
+                    $('.username').val(backData.data.username)
+                    $('.nickname').val(backData.data.nickname)
+                    $('.email').val(backData.data.email)
+                    $('.password').val(backData.data.password)
+                    $('.user_pic').attr('src', backData.data.userPic)
+                }
+            });
+        })
+        // 用户修改信息后 FormData 发送表达请求 渲染页面(其中有文件预览)
+
+        //1.给file表单元素注册onchange事件
+        $('#exampleInputFile').change(function () {
+            //1.2 获取用户选择的图片
+            var file = this.files[0];
+            //1.3 将文件转为src路径
+            var url = URL.createObjectURL(file);
+            //1.4 将url路径赋值给img标签的src
+            $('.user_pic').attr('src', url);
+        });
+
+        $('.btn-edit').on('click',function(e){
+            //禁用表单默认提交事件
+            e.preventDefault();
+            //创建FormData对象:参数是表单dom对象
+            var form=document.getElementById('form')
+            var fd=new FormData(form)
+            $.ajax({
+                url:BigNews.user_edit,
+                type:'post',
+                dataType:'json',
+                data:fd,
+                contentType: false,
+                processData: false,
+                success: function(backData){
+                    console.log(backData);
+                    if(backData.code==200){
+                        alert(backData.msg)
+                        window.location.reload()
+                    }
+                }
+            });
+        });
+
+    </script>
 </body>
 
 </html>
