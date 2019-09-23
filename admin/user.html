@@ -77,11 +77,16 @@
                 dataType: 'json',
                 success: function (backData) {
                     console.log(backData);
-                    $('.username').val(backData.data.username)
-                    $('.nickname').val(backData.data.nickname)
-                    $('.email').val(backData.data.email)
-                    $('.password').val(backData.data.password)
+                    // $('.username').val(backData.data.username)
+                    // $('.nickname').val(backData.data.nickname)
+                    // $('.email').val(backData.data.email)
+                    // $('.password').val(backData.data.password)
                     $('.user_pic').attr('src', backData.data.userPic)
+
+                    // 简写 渲染
+                    for (var key in backData.data) {
+                        $('.'+key).val(backData.data[key])
+                    }
                 }
             });
         })
