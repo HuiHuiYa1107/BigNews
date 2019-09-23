@@ -82,7 +82,6 @@
                     // $('.email').val(backData.data.email)
                     // $('.password').val(backData.data.password)
                     $('.user_pic').attr('src', backData.data.userPic)
-
                     // 简写 渲染
                     for (var key in backData.data) {
                         $('.'+key).val(backData.data[key])
@@ -90,8 +89,8 @@
                 }
             });
         })
-        // 用户修改信息后 FormData 发送表达请求 渲染页面(其中有文件预览)
 
+        // 用户修改信息后 FormData 发送表达请求 渲染页面(其中有文件预览)
         //1.给file表单元素注册onchange事件
         $('#exampleInputFile').change(function () {
             //1.2 获取用户选择的图片
