@@ -11,10 +11,37 @@
     <link rel="stylesheet" href="css/iconfont.css">
     <link rel="stylesheet" href="css/main.css">
     <script src="js/jquery-1.12.4.min.js"></script>
+    <script src="./js/bootstrap/js/bootstrap.min.js"></script>
+    <script src="./js/jquery.twbsPagination.js"></script>
     <!-- 引入模板引擎js文件 -->
     <script src="./js/template-web.js"></script>
     <script src="./js/http.js"></script>
 </head>
+
+<!-- 分类模板 -->
+<script id="cat-list" type="text/html">
+    <option value="">所有分类</option>
+    {{each data}}
+    <option value="{{$value.id}}">{{$value.name}}</option>
+    {{/each}}
+</script>
+
+<!-- 文章列表模板 -->
+<script id="art-list" type="text/html">
+    {{each data.data v}}
+    <tr>
+        <td>{{v.title}}</td>
+        <td>{{v.author}}</td>
+        <td>{{v.category}}</td>
+        <td class="text-center">{{v.date}}</td>
+        <td class="text-center">{{v.state}}</td>
+        <td class="text-center">
+            <a href="article_edit.html" class="btn btn-default btn-xs edit" data-id='{{v.id}}'>编辑</a>
+            <a href="javascript:void(0);" class="btn btn-danger btn-xs delete" data-id='{{v.id}}'>删除</a>
+        </td>
+    </tr>
+    {{/each}}
+</script>
 
 <body>
     <div class="container-fluid">
@@ -69,11 +96,79 @@
                     </tr>
                 </tbody>
             </table>
+           <div class="row text-center">
+                <ul id="pagination-demo" class="pagination-sm"></ul>
+           </div>
         </div>
     </div>
 </body>
 
 <script>
+    $(function () {
+        // 1.ajax发送请求 获取分类列表
+        $.ajax({
+            url: BigNews.category_list,
+            type: 'get',
+            dataType: 'json',
+            success: function (backData) {
+                console.log(backData);
+                $('#selCategory').html(template('cat-list', backData))
+            }
+        });
+
+        // 2.筛选按钮注册事件
+        $('#btnSearch').click(function (e) {
+            e.preventDefault()
+            // $.ajax({
+            //     url: BigNews.category_query,
+            //     type: 'get',
+            //     dataType: 'json',
+            //     data: {
+            //         type: $('#selCategory').val(),
+            //         state: $('#selStatus').val(),
+            //         page: 1,
+            //         perpage: 10,
+            //     },
+            //     success: function (backData) {
+            //         console.log(backData);
+            //         $(".table>tbody").html(template('art-list', backData))
+            //     }
+            // });
+            getPage(1);
+        })
+
+        // 封装函数-----根据具体再第几页渲染页面
+        function getPage(currentPage) {
+            $.ajax({
+                url: BigNews.category_query,
+                type: 'get',
+                dataType: 'json',
+                data: {
+                    type: $('#selCategory').val(),
+                    state: $('#selStatus').val(),
+                    page: currentPage,
+                    perpage: 10,
+                },
+                success: function (backData) {
+                    console.log(backData);
+                    $(".table>tbody").html(template('art-list', backData))
+                }
+            });
+        }
+
+        // 3.页面一加载 主动加载所有分类
+        $('#btnSearch').trigger('click')
+
+
+        // 4.分页
+        $('#pagination-demo').twbsPagination({
+            totalPages: 35,
+            visiblePages: 7,
+            onPageClick: function (event, page) {
+                $('#page-content').text('Page ' + page);
+            }
+        })
+    })
 
 
 </script>
