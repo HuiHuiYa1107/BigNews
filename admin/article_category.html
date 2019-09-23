@@ -74,7 +74,7 @@
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
                             aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">编辑类别</h4>
+                    <h4 class="modal-title">文章分类管理</h4>
                 </div>
                 <div class="modal-body">
                     <!-- 表单 -->
@@ -90,8 +90,8 @@
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default cancel" >关闭</button>
-                    <button type="button" class="btn btn-primary" id='saveArticle'>保存</button>
+                    <button type="button" class="btn btn-default cancel">关闭</button>
+                    <button type="button" class="btn btn-primary " id='saveArticle'>保存</button>
                 </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
@@ -115,17 +115,38 @@
             // do something...
             var target = e.relatedTarget
             console.log(target);
-            if(target == $('#xinzengfenlei')[0]){
-                $('#myModal .modal-title').text('新增')
+            if (target == $('#xinzengfenlei')[0]) {
+                $('#myModal #saveArticle').text('新增')
+            }else{
+                $('#myModal #saveArticle').text('编辑')
             }
         })
 
         // 关闭模态框
-        $('#myModal .cancel').on('click',function(){
+        $('#myModal .cancel').on('click', function () {
             $('#myModal').modal('hide')
         })
 
         // 
+        $('#saveArticle').on('click', function () {
+            if($(this).text()=='新增'){
+                $.ajax({
+                    url:BigNews.category_add,
+                    type:'post',
+                    dataType:'json',
+                    data:{
+                        name:$('#article_Name').val(),
+                        slug:$('#description').val()
+                    },
+                    success: function(backData){
+                        console.log(backData);
+                        if(backData.code==201){
+                            window.location.reload()
+                        }
+                    }
+                });
+            }
+        })
 
 
     })
