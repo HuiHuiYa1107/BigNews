@@ -29,7 +29,6 @@
         </td>
     </tr>
     {{/each}}
-
 </script>
 
 <body>
@@ -112,12 +111,12 @@
 
         // 判断点击的是新增还是编辑
         $('#myModal').on('show.bs.modal', function (e) {
-            // do something...
             var target = e.relatedTarget
             console.log(target);
+
             if (target == $('#xinzengfenlei')[0]) {
                 $('#myModal #saveArticle').text('新增')
-                
+
             } else {
                 $('#myModal #saveArticle').text('编辑')
                 // 将点击编辑的data-id赋值给模态框的编辑
@@ -132,11 +131,11 @@
         $('#myModal .cancel').on('click', function () {
             $('#myModal').modal('hide')
             // 清空列表
-            $('#myModal')[0].reset()
+            $('#myModal').on('hidden.bs.modal', function (e) {
+                $('#modalForm')[0].reset()
+            })
+            
         })
-
-    
-        // 
 
         // 判断新增/编辑
         $('#saveArticle').on('click', function () {
@@ -169,7 +168,7 @@
                     },
                     success: function (backData) {
                         console.log(backData);
-                        if(backData.code==200){
+                        if (backData.code == 200) {
                             window.location.reload()
                         }
                     }
@@ -178,18 +177,18 @@
         })
 
         // 删除----------------动态添加的  需委托事件
-        $('.table>tbody').on('click','.btn-delete',function(){
+        $('.table>tbody').on('click', '.btn-delete', function () {
             console.log($(this).attr('data-id'));
             $.ajax({
-                url:BigNews.category_delete,
-                type:'post',
-                dataType:'json',
-                data:{
-                    id:$(this).attr('data-id')
+                url: BigNews.category_delete,
+                type: 'post',
+                dataType: 'json',
+                data: {
+                    id: $(this).attr('data-id')
                 },
-                success: function(backData){
+                success: function (backData) {
                     console.log(backData);
-                    if(backData.code==204){
+                    if (backData.code == 204) {
                         window.location.reload()
                     }
                 }

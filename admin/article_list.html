@@ -115,7 +115,6 @@
                 $('#selCategory').html(template('cat-list', backData))
             }
         });
-
         // 2.筛选按钮注册事件
         $('#btnSearch').click(function (e) {
             e.preventDefault()
@@ -131,7 +130,7 @@
                 type: 'get',
                 dataType: 'json',
                 data: {
-                    type: $('#selCategory').val(),//文章类型id    页面加载时已将id存在option的value中-----------获取option的value是从select的value获取的
+                    type: $('#selCategory').val(),//文章类型id   页面加载时已将id存在option的value中-----------获取option的value是从select的value获取的
                     state: $('#selStatus').val(),
                     page: currentPage,//当前页数
                     perpage: 10,//每页显示的条数
