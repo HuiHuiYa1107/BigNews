@@ -192,8 +192,8 @@
 
         // 点击文章发表按钮
         $('#release_btn').click(function () {
-
-            
+            console.log($('.level02>li').index(1));
+            $('.level02>li:eq(1)',window.parent.document).addClass('active').siblings().removeClass('active')
         })
     })
 
