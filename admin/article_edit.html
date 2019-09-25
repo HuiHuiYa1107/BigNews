@@ -15,7 +15,24 @@
     <!-- 模板引擎 -->
     <script src="./js/template-web.js"></script>
     <script src="./js/http.js"></script>
+    <!-- 导包  日期插件 -->
+    <script src="./js/jedate/js/jedate.js"></script>
+    <link type="text/css" rel="stylesheet" href="./js/jedate/css/jeDate-test.css">
+    <link type="text/css" rel="stylesheet" href="./js/jedate/css/jedate.css">
+
+    <!-- 导包 富文本插件 -->
+    <script src="./js/tinymce/tinymce.min.js"></script>
+
+    <!-- 导入 日期插件和富文本插件的初始化代码 -->
+    <script src="./js/config.js"></script>
 </head>
+
+<!-- 文章类别模板 -->
+<script id="cat-list" type="text/html">
+    {{each data v}}
+    <option value="{{v.id}}">{{v.name}}</option>
+    {{/each}}
+</script>
 
 <body>
     <div class="container-fluid">
@@ -54,10 +71,9 @@
                     <div class="col-sm-4">
                         <div class="jeitem">
                             <div class="jeinpbox">
-                                <input type="text" name="date" class="jeinput" id="testico" placeholder="YYYY-MM-DD">
+                                <input type="text" class="jeinput" id="testico" placeholder="YYYY-MM-DD">
                                 <div class="icons jebtns"
-                                    onclick="jeDate('#testico',{trigger:false,format: 'YYYY-MM-DD',theme: { bgcolor: '#00A680', pnColor: '#00DDAA' }})">
-                                </div>
+                                    onclick="jeDate('#testico',{trigger:false,format: 'YYYY-MM-DD'})"></div>
                             </div>
                         </div>
                     </div>
@@ -65,7 +81,7 @@
                 <div class="form-group">
                     <label for="inputEmail3" class="col-sm-2 control-label">文章内容：</label>
                     <div class="col-sm-10">
-                        <input type="text" class="form-control" id="mytextarea" placeholder="文章内容" value="文章内容">
+                        <textarea id="mytextarea" name="mytextarea" style="height: 350px"></textarea>
                     </div>
                 </div>
                 <div class="form-group">
@@ -78,5 +94,103 @@
         </div>
     </div>
 </body>
+
+<script>
+
+
+    $(function () {
+        // 获取article_list页面 传来的id值
+        var id = window.location.href.split('=')[1]
+        console.log(id);
+        // ajax发送请求 获取文章分类
+        $.ajax({
+            url: BigNews.category_list,
+            type: 'get',
+            dataType: 'json',
+            success: function (backData) {
+                console.log(backData);
+                $('.category').html(template('cat-list', backData))
+            }
+        });
+
+        // ajax发送请求 获取文章详细信息
+        $.ajax({
+            url: BigNews.article_search,
+            type: 'get',
+            dataType: 'json',
+            data: {
+                id: id
+            },
+            success: function (backData) {
+                console.log(backData);
+                $('#inputTitle').val(backData.data.title)
+                $('.article_cover').attr('src', backData.data.cover)
+                $('.category').val(backData.data.categoryId)
+                $('#testico').val(backData.data.date)
+                // 因为富文本插件比较复杂  加载需要时间  
+                //如果ajax请求极快有可能数据请求完成  而插件内部还没有加载完成
+                // 解决方案: (1)loding (2)定时器
+                setTimeout(function () {
+                    tinymce.activeEditor.setContent(backData.data.content);
+                }, 500);
+            }
+        });
+
+        // 文件预览
+        //1.给file表单元素注册onchange事件
+        $('#inputCover').change(function () {
+            //1.2 获取用户选择的图片
+            var file = this.files[0];
+            //1.3 将文件转为src路径
+            var url = URL.createObjectURL(file);
+            //1.4 将url路径赋值给img标签的src
+            $('.article_cover').attr('src', url);
+        });
+
+        // 修改按钮注册事件
+        $('.btn-edit').click(function (e) {
+            //禁用表单默认提交事件
+            e.preventDefault();
+            artSave('已发布')
+        })
+
+        // 存为草稿按钮注册事件
+        $('.btn-draft').click(function (e) {
+            //禁用表单默认提交事件
+            e.preventDefault();
+            artSave('草稿')
+        })
+
+
+
+        // 封装函数
+        function artSave(state) {
+
+            //创建FormData对象:参数是表单dom对象
+            var fd = new FormData($('#form')[0])
+            fd.append('id', id)
+            fd.append('date', $('#testico').val())
+            fd.append('content', tinymce.activeEditor.getContent())
+            fd.append('state', state)
+            $.ajax({
+                url: BigNews.article_edit,
+                type: 'post',
+                dataType: 'json',
+                data: fd,
+                contentType: false,
+                processData: false,
+                success: function (backData) {
+                    console.log(backData);
+                    if (backData.code == 200) {
+                        // 修改成功返回上一个页面
+                        window.history.back()
+                    }
+                }
+            });
+        }
+
+    })
+
+</script>
 
 </html>

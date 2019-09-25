@@ -2,17 +2,14 @@
 (function () {
     //外接js文件一般写在head中，此时DOM树还没有加载，所以需要将代码写到入口函数中
     $(function () {
-        jeDate('#testico', {
-            trigger: 'click',
-            theme: { bgcolor: "#00A680", pnColor: "#00DDAA" },//绿色主题
+        //  日期插件初始化
+        jeDate("#testico", {
             format: "YYYY-MM-DD",
             isinitVal: true,
-        });
-
-        /* 初始化选项 */
+        })
+        // 富文本插件 初始化
         tinymce.init({
             selector: '#mytextarea',
-            height:'350px',
             language: 'zh_CN',
             directionality: 'ltl',
             browser_spellcheck: true,
@@ -24,6 +21,7 @@
                 "code"
             ],
             toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image | code",
+
         });
     });
 
